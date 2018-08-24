@@ -39,6 +39,7 @@
 #include <iomanip>
 #include <set>
 #include <cassert>
+#include <fstream>
 
 
 struct Datapoint
@@ -101,8 +102,8 @@ struct TimeBinDatapoint
 struct CmdLineArgs
 {
     QString tmFileName;
-    QString outputDir;
-    QVector<int> fullyMinedHkids;
+    QString checkFileName;
+    QVector<int> aPids;
     QVector<int> deltaHkids;
     QVector<int> binnedHkids;
     bool allSci;
