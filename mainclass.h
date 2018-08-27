@@ -25,12 +25,11 @@
 #include <QStringList>
 #include <QDebug>
 #include <QCoreApplication>
-#include <QRegExp>
-#include <QHash> 
-#include <QSet> 
-#include <QtCore/qmath.h>
+// #include <QRegExp>
+// #include <QHash> 
+// #include <QSet> 
+// #include <QtCore/qmath.h>
 
-#include <iostream>
 #include <stdexcept>
 #include <stdlib.h>
 #include <math.h>
@@ -40,64 +39,6 @@
 #include <set>
 #include <cassert>
 #include <fstream>
-
-
-struct Datapoint
-{
-    Datapoint() :
-       umkid(0), t_utc(0), t_rel(0), value(0), hkid(0), pktIndex(0) {}
-    Datapoint(unsigned long long umkid, double t_utc, double t_rel, double value,
-              int hkid, unsigned int pktIndex) :
-       umkid(umkid), t_utc(t_utc), t_rel(t_rel), value(value), hkid(hkid), pktIndex(pktIndex) {}
-    unsigned long long umkid; 
-    double t_utc; 
-    double t_rel; 
-    double value;
-    int hkid; 
-    unsigned int pktIndex; 
-};
-
-// For sorting based on timestamp: 
-inline bool datapointLessThan(const Datapoint& d1, const Datapoint& d2 ) 
-{ return d1.t_rel < d2.t_rel; }
-
-struct XinaMarkerBinDatapoint
-{
-    XinaMarkerBinDatapoint() : 
-        t_utc(0), t_rel(0), avg(0), min(0), max(0), total(0), numSamples(0) {}
-    double t_utc;
-    double t_rel;
-    double avg;
-    double min;
-    double max;
-    double total;
-    int numSamples;
-    MomGse::MarkerData* markerDataPtr; 
-};
-
-struct XinaMetaMarkerBinDatapoint
-{
-    XinaMetaMarkerBinDatapoint() : 
-        avg(0), min(0), max(0), total(0), numSamples(0) {}
-    double avg;
-    double min;
-    double max;
-    double total;
-    int numSamples;
-};
-
-struct TimeBinDatapoint
-{
-    TimeBinDatapoint() : 
-        t_utc(0), t_rel(0), avg(0), min(0), max(0), total(0), numSamples(0) {}
-    double t_utc;
-    double t_rel;
-    double avg;
-    double min;
-    double max;
-    double total;
-    int numSamples;
-};
 
 struct CmdLineArgs
 {
