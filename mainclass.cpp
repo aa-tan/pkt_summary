@@ -72,11 +72,7 @@ CmdLineArgs parseArguments(const QStringList & arguments)
                                         "Path to TM file to extract data from", "FILE");
     parser.addOption(fileOption);
 
-    // const QCommandLineOption existsOption(QStringList() << "e" << "exists",
-    //                                       "Path to text file containing list of Packet Types to check for in TM file.", "FILE");
-    // parser.addOption(existsOption);
-
-    const QCommandLineOption apidOption(QStringList() << "a" << "apid", "List of APIDs to check for. Ex. 1,2,3 or 1-3", "IDs");
+    const QCommandLineOption apidOption(QStringList() << "a" << "apid", "List of APIDs to check if exists in TM file. Ex. 1,2,3 or 1-3", "IDs");
     parser.addOption(apidOption);
 
     parser.process(arguments);
@@ -152,14 +148,8 @@ GseLib::TelemetryFilePtr createTmFile(const QString& tmFileName)
 }
 
 
-void extractData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
+void summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
 {
-    qDebug() << "About to extract data. ";
-
-    const DataInterpretation & di = DataInterpretation::current();
-    const int tid = tmFile->tid();
-
-
     //
     // Creates a map type_map that stores the type and # of ocurrences
     // Reads from tmFile and adds packet to map
@@ -197,7 +187,7 @@ void extractData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
             }
         }
         if(flag){
-            QCoreApplication::exit();
+            exit(1);
         }
     }
 }
@@ -212,10 +202,7 @@ void MainClass::run()
     CmdLineArgs args = parseArguments(qApp->arguments());
     GseLib::TelemetryFilePtr tmFile = createTmFile(args.tmFileName);
     const MomGse::MarkerCache markerCache(new GseLib::TelemetryFile());
-
-    // updateHkidsToBeMined(args);
-        extractData(tmFile, args.aPids);
-
+    summarizeData(tmFile, args.aPids);
     quit();
 }
 
