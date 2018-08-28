@@ -14,6 +14,7 @@ using GseLib::TelemetryFile;
 
 using MomGse::MetaMarker;
 
+// Declare type_pair struct used in type_map.
 struct type_pair{
         QString name;
         int count;
@@ -177,7 +178,7 @@ bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
     // If aPids is empty, output all found types
     // Else, iterate through aPids, check if it exists in type_map, output
     // If not found, exit()
-    std::cout << "Type_Name\tType_Number\tPackets_Found" << "\n";
+    std::cout << "Type_Name\tType/APID\tPackets_Found" << "\n";
     if(aPids.isEmpty()){
         for(std::map<int,type_pair>::iterator it = type_map.begin(); it != type_map.end(); ++it) {
             std::cout << type_map[it->first].name << "\t" <<it->first << "\t" << type_map[it->first].count << "\n";
@@ -200,8 +201,8 @@ bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
         if(flag){
             return false;
         }
-        std::cout << "Total packets: " << sum << "\n";
     }
+    std::cout << "Total packets: " << sum << "\n";
     return true;
 }
  
