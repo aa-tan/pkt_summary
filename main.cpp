@@ -1,11 +1,11 @@
-#include "./mainclass.h"
+#include "mainclass.h"
 #include <QCoreApplication>
 #include <QTimer>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    QString version = "0.0.1";
+    QString version = "1.0.0";
     app.setApplicationVersion(version);
 
     MainClass myMain;
