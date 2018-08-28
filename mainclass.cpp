@@ -14,6 +14,11 @@ using GseLib::TelemetryFile;
 
 using MomGse::MetaMarker;
 
+struct type_pair{
+        QString name;
+        int count;
+};
+
 QVector<int> extractHkIds(const QString& hkidArg)
 {
     QVector<int> hkids;
@@ -148,43 +153,46 @@ GseLib::TelemetryFilePtr createTmFile(const QString& tmFileName)
 }
 
 
-void summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
+bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
 {
     //
     // Creates a map type_map that stores the type and # of ocurrences
     // Reads from tmFile and adds packet to map
     //
     TMPacketPtr pkt;
-    std::map<int, int> type_map;
-    std::vector<int> v;
+    std::map<int, type_pair> type_map;
     while ((pkt = tmFile->getNext()) != tmFile->end())
     {
         int type = pkt->type();
+        QString name = pkt->typeName();
         if (type_map.count(type)){
-            type_map[type] ++;
+            type_map[type].count ++;
         }
         else {
-            type_map[type] = 1;
+            type_map[type].count = 1;
+            type_map[type].name = name;
         }
     }
     // If aPids is empty, output all found types
     // Else, iterate through aPids, check if it exists in type_map, output
     // If not found, exit()
+    std::cout << "Type_Name\tType_Number\tPackets_Found" << "\n";
     if(aPids.isEmpty()){
-        for(std::map<int,int>::iterator it = type_map.begin(); it != type_map.end(); ++it) {
-            std::cout << it->first << ": " << type_map[it->first] << "\n";
+        for(std::map<int,type_pair>::iterator it = type_map.begin(); it != type_map.end(); ++it) {
+            std::cout << type_map[it->first].name << "\t" <<it->first << "\t" << type_map[it->first].count << "\n";
         }
     }
     else {
         bool flag = false;
         for(int i=0; i < aPids.size(); i++){
             if(type_map.count(aPids[i])){
-                std::cout << aPids[i] << ": " << type_map[aPids[i]] << "\n";
+                std::cout << type_map[aPids[i]].name << "\t" << aPids[i] << "\t" << type_map[aPids[i]].count << "\n";
             }
             else {
                 flag = true;
-                std::cout << aPids[i] << ": " << 0 << "\n";
+                continue;
             }
+            flag = false;
         }
         if(flag){
             return false;
