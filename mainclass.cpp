@@ -187,9 +187,10 @@ void summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
             }
         }
         if(flag){
-            exit(1);
+            return false;
         }
     }
+    return true;
 }
  
 MainClass::MainClass(QObject *parent) :
@@ -201,8 +202,9 @@ void MainClass::run()
 {
     CmdLineArgs args = parseArguments(qApp->arguments());
     GseLib::TelemetryFilePtr tmFile = createTmFile(args.tmFileName);
-    const MomGse::MarkerCache markerCache(new GseLib::TelemetryFile());
-    summarizeData(tmFile, args.aPids);
+    if (!summarizeData(tmFile, args.aPids)){
+        ::exit(1);
+    }
     quit();
 }
 
