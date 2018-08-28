@@ -160,6 +160,7 @@ bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
     // Reads from tmFile and adds packet to map
     //
     TMPacketPtr pkt;
+    int sum = 0;
     std::map<int, type_pair> type_map;
     while ((pkt = tmFile->getNext()) != tmFile->end())
     {
@@ -180,6 +181,7 @@ bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
     if(aPids.isEmpty()){
         for(std::map<int,type_pair>::iterator it = type_map.begin(); it != type_map.end(); ++it) {
             std::cout << type_map[it->first].name << "\t" <<it->first << "\t" << type_map[it->first].count << "\n";
+            sum += type_map[it->first].count;
         }
     }
     else {
@@ -187,6 +189,7 @@ bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
         for(int i=0; i < aPids.size(); i++){
             if(type_map.count(aPids[i])){
                 std::cout << type_map[aPids[i]].name << "\t" << aPids[i] << "\t" << type_map[aPids[i]].count << "\n";
+                sum += type_map[aPids[i]].count;
             }
             else {
                 flag = true;
@@ -197,6 +200,7 @@ bool summarizeData(GseLib::TelemetryFilePtr tmFile, QVector<int> aPids)
         if(flag){
             return false;
         }
+        std::cout << "Total packets: " << sum << "\n";
     }
     return true;
 }
